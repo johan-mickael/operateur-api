@@ -22,6 +22,4 @@ create table MobileMoney (
 insert into MobileMoney values(1, 1, 10000, default, default);
 insert into MobileMoney values(2, 1, 5000.5, default, default);
 
-create view v_depot_non_valide as select
-m.id, c.nom, c.numero, m.valeur, m.dateMobileMoney, m.estValidee
-from MobileMoney m join client c on c.id = m.idClient  where estValidee = false;
+create view 
