@@ -327,11 +327,11 @@ public class Client {
 		return Client.getSoldeCredit(this);
 	}
 	
-	public Response retraitMobileMoney(String num, Double val) {
-		Response res = null;
-		Double soldeMobilemoney = (double) Client.getSoldeMobileMoney(num).data;
-		if(val > soldeMobilemoney)
-			return new Response("210", "Solde insuffisant");
-		
-	}
+//	public Response retraitMobileMoney(String num, Double val) {
+//		Response res = null;
+//		Double soldeMobilemoney = (double) Client.getSoldeMobileMoney(num).data;
+//		if(val > soldeMobilemoney)
+//			return new Response("210", "Solde insuffisant");
+//		
+//	}
 }
