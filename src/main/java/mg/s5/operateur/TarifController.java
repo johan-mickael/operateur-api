@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import base.Tarif;
@@ -14,49 +15,17 @@ import function.Response;
 @CrossOrigin
 public class TarifController {
 	@GetMapping("tarifs")
-	public Response getData(){
-		Response response = new Response();
-		try {
-			response.data = Tarif.getData();
-			response.code = "200";
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			response.code = "400";
-			response.message = e.getMessage();
-		}
-		return response;
+	public Response getData(@RequestHeader("Authorization") String token){
+		return Tarif.getData(token);
 	}
 	
 	@PutMapping("tarifs/modifier")
-	public Response update(@RequestBody Tarif tarif) {
-		Response response = new Response();
-		try {
-			tarif = tarif.update();
-			response.data = tarif;
-			response.code = "200";
-			response.message = "Modification reussie";
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			response.code = "400";
-			response.message = e.getMessage();
-		}
-		return response;
+	public Response update(@RequestHeader("Authorization") String token, @RequestBody Tarif tarif) {
+		return tarif.update(token);
 	}
 	
 	@GetMapping("tarif/{id}")
-	public Response getById(@PathVariable String id) {
-		Response response = new Response();
-		try {
-			response.data = Tarif.getById(id, null);
-			response.code = "200";
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			response.code = "400";
-			response.message = e.getMessage();
-		}
-		return response;
+	public Response getById(@RequestHeader("Authorization") String token, @PathVariable String id) {
+		return Tarif.getById(id, token);
 	}
 }

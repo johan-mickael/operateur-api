@@ -1,22 +1,18 @@
 package function;
 
-import java.sql.Connection;
-import java.util.List;
-
-import mg.s5.operateur.OffreController;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
-import base.Client;
 import base.mongo.Offres;
 
 
-
 public class Main {
-	
+	@Autowired
+	public static mg.s5.service.OffreRepository offre;
 	public static void main(String[] args) throws Exception {
-		Response res = Client.get();
-		System.out.println(res);
+//		Response res = Client.get();
+//		System.out.println(res);
+		
+		Offres offre = Mongo.getById("2");
+		System.out.println(offre.getForfaits().get(1).getUtilisation().getOperateur());
 	}
 
 }

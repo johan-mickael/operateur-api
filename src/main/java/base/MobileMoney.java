@@ -121,8 +121,7 @@ public class MobileMoney {
 			co = Function.getConnect();
 			String sql = "insert into MobileMoney values(?, ?, ?)";
 			st = co.prepareStatement(sql);
-			Integer id = Helper.getMaxId(co, "MobileMoney");
-			id = (id == null) ?0 :id+1;
+			Integer id = Helper.getNextId(co, "MobileMoney");
 			st.setInt(1, id);
 			st.setInt(2, inputMobileMoney.idClient);
 			st.setBigDecimal(3, inputMobileMoney.valeur);

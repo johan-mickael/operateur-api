@@ -9,6 +9,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import function.Function;
+import function.Response;
 
 @SuppressWarnings("serial")
 public class Tarif implements Serializable {
@@ -104,66 +105,95 @@ public class Tarif implements Serializable {
 		}
 	}
 	
-	public Tarif update() throws Exception {
+	public Response update(String token) {
+		Response res;
 		Connection co = null;
 		Tarif tarif = null;
 		try {
 			co = Function.getConnect();
-			this.update(co);
-			tarif = Tarif.getById(this.id+"", co);
+			res = Login.tokenRequired(co, token, Login.table1);
+			if(res == null) {
+				this.update(co);
+				res = Tarif.getById(this.id+"", token);
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			res = new Response("400", e.toString());
 		} finally {
-			if (co != null) co.close();
+				try {
+					if (co != null) co.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					res = new Response("500", e.toString());
+				}
 		}
-		return tarif;
+		return res;
 	}
 	
-	public static ArrayList<Tarif> getData() throws Exception {
+	public static Response getData(String token) {
+		Response res; 
 		ArrayList<Tarif> array = new ArrayList<Tarif>();
 		Connection co = null;
 		PreparedStatement st = null;
 		ResultSet result = null;
 		try {
 			co = Function.getConnect();
-			String sql = "select * from v_tarif";
-			st = co.prepareStatement(sql);
-			result = st.executeQuery();
-			while(result.next()) array.add(new Tarif(result.getInt("id"), result.getString("operateurs"), result.getString("produits"), Double.valueOf(result.getDouble("prix"))));
-		} catch (SQLException e) {
+			res = Login.tokenRequired(co, token, Login.table1);
+			if(res == null) {
+				String sql = "select * from v_tarif";
+				st = co.prepareStatement(sql);
+				result = st.executeQuery();
+				while(result.next()) array.add(new Tarif(result.getInt("id"), result.getString("operateurs"), result.getString("produits"), Double.valueOf(result.getDouble("prix"))));
+				res = new Response("200", "Get Tarif OK", array);
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
-			throw e;
+			res = new Response("400", e.toString());
 		} finally {
-			if (result != null) result.close();
-			if (st != null) st.close();
-			if (co != null) co.close();
+				try {
+					if (result != null) result.close();
+					if (st != null) st.close();
+					if (co != null) co.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+					res = new Response("500", e.toString());
+				}
 		}
-		return array;
+		return res;
 	}
 	
-	public static Tarif getById(String id, Connection co) throws Exception {
+	public static Response getById(String id, String token) {
+		Response res;
 		Tarif tarif = null;
 		PreparedStatement st = null;
 		ResultSet result = null;
-		Boolean connect = true;
+		Connection co = null;
 		try {
-			if(co == null) {
-				connect = false;
-				co = Function.getConnect();
+			co = Function.getConnect();
+			res = Login.tokenRequired(co, token, Login.table1);
+			if(res == null) {
+				String sql = "select * from v_tarif where id = " + id;
+				st = co.prepareStatement(sql);
+				result = st.executeQuery();
+				while(result.next()) tarif = new Tarif(result.getInt("id"), result.getString("operateurs"), result.getString("produits"), result.getDouble("prix"));
+				res = new Response("200", "modification tarif reussie ", tarif);
 			}
-			String sql = "select * from v_tarif where id = " + id;
-			st = co.prepareStatement(sql);
-			result = st.executeQuery();
-			while(result.next()) tarif = new Tarif(result.getInt("id"), result.getString("operateurs"), result.getString("produits"), result.getDouble("prix"));
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-			throw e;
+			res = new Response("400", e.toString());
 		} finally {
-			if (result != null) result.close();
-			if (st != null) st.close();
-			if (co != null && !connect) co.close();
+				try {
+					if (result != null) result.close();
+					if (st != null) st.close();
+					if (co != null) co.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					res = new Response("500", e.toString());
+				}
 		}
-		return tarif;
+		return res;
 	}
 }

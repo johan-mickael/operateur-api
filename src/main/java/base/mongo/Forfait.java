@@ -21,6 +21,12 @@ public class Forfait {
 	
 	
 	
+	public Forfait(String produit, String unite, Utilisation utilisation) {
+		super();
+		this.produit = produit;
+		this.unite = unite;
+		this.utilisation = utilisation;
+	}
 	public Forfait() {
 		super();
 	}

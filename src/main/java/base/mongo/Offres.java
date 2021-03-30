@@ -1,5 +1,7 @@
 package base.mongo;
 
+import java.util.ArrayList;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -11,47 +13,42 @@ public class Offres {
 	String nom;
 	Double tarif;
 	Integer validite;
-	Forfait[] forfaits;
+	ArrayList<Forfait> forfaits;
 	
 	public Offres(String id, String idOffre, String nom, Double tarif,
-			Integer validite, Forfait[] forfaits) {
+			Integer validite, ArrayList<Forfait> forfaits) {
 		super();
 		this.id = id;
-		this.idOffre = idOffre;
 		this.nom = nom;
 		this.tarif = tarif;
 		this.validite = validite;
 		this.forfaits = forfaits;
+		this.idOffre = idOffre;
 	}
 	
 	
 	
+	public Offres(String id, String idOffre, String nom, Double tarif, Integer validite) {
+		super();
+		this.id = id;
+		this.nom = nom;
+		this.tarif = tarif;
+		this.idOffre = idOffre;
+		this.validite = validite;
+		this.forfaits = new ArrayList<Forfait>();
+	}
+
+
+
 	public Offres() {
 		super();
 	}
-
-
-
-	public Offres(String id) {
-		super();
-		this.idOffre = id;
-		System.out.println(this.id);
-	}
-
-
 
 	public String getId() {
 		return id;
 	}
 	public void setId(String id) {
 		this.id = id;
-	}
-	
-	public String getIdOffre() {
-		return idOffre;
-	}
-	public void setIdOffre(String idOffre) {
-		this.idOffre = idOffre;
 	}
 	public String getNom() {
 		return nom;
@@ -71,11 +68,23 @@ public class Offres {
 	public void setValidite(int validite) {
 		this.validite = validite;
 	}
-	public Forfait[] getForfaits() {
+	public ArrayList<Forfait> getForfaits() {
 		return forfaits;
 	}
-	public void setForfaits(Forfait[] forfaits) {
+	public void setForfaits(ArrayList<Forfait> forfaits) {
 		this.forfaits = forfaits;
+	}
+
+
+
+	public String getIdOffre() {
+		return idOffre;
+	}
+
+
+
+	public void setIdOffre(String idOffre) {
+		this.idOffre = idOffre;
 	}
 	
 	
