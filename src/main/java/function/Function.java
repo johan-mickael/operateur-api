@@ -12,6 +12,7 @@ public class Function {
         Connection co = DriverManager
            .getConnection("jdbc:postgresql://ec2-54-211-176-156.compute-1.amazonaws.com:5432/dfipgrpro24pi4",
            "kmfflyzndyujjm", "4964e91fd56ca6b8c4f050f543c244e78def5114ba39b77373ea2648516d3be3");
+//			Connection co = DriverManager.getConnection("jdbc:postgresql://localhost:5432/s5final", "postgresql", "root");
         co.setAutoCommit(false);
 		return co;
 	}	
