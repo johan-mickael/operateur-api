@@ -5,6 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import function.Function;
+import function.Response;
+
 public class Solde {
 	int idClient;
 	Double credit;
@@ -21,7 +24,6 @@ public class Solde {
 		PreparedStatement st = null;
 		ResultSet result = null;
 		try {
-//			co = Function.getConnect();
 			String sql = "SELECT * from solde where idClient = " + this.idClient;
 			st = co.prepareStatement(sql);
 			result = st.executeQuery();
@@ -36,8 +38,52 @@ public class Solde {
 		} finally {
 			if(result != null) result.close();
 			if(st != null) st.close();
-//			if(co != null) co.close();
 		}
+	}
+	
+	public static Response achatCredit(String token, Double montant) {
+		Response response = null;
+		Connection co = null;
+		try {
+			co = Function.getConnect();
+			response = Login.getIdUserTokenRequired(co, token, Login.table2);
+			if(response.data != null) {
+				String id = (String) response.data;
+				int idClient = Integer.parseInt(id);
+				Solde solde = new Solde(idClient, co);
+				if(solde.mobilemoney >= montant) {
+					solde.credit += montant;
+					solde.mobilemoney -= montant;
+					solde.update(co, "credit", solde.credit);
+					solde.update(co, "mobileMoney", solde.mobilemoney);
+					response = new Response("200", "Achat reussi", solde);
+				} else {
+					response = new Response("204", "Solde insuffisant", solde);
+				}
+				co.commit();
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			try {
+				co.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				response = new Response("400", e1.toString());
+				e1.printStackTrace();
+			}
+			response = new Response("400", e.toString());
+			e.printStackTrace();
+		} finally {
+			if(co != null)
+				try {
+					co.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					response = new Response("400", e.toString());
+					e.printStackTrace();
+				}
+		}
+		return response;
 	}
 	
 	public void update(Connection co, String methode, Double solde) throws SQLException {

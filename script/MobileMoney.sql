@@ -1,14 +1,14 @@
 drop table client;
 create table client (
-    id int primary key not null,
+    id int primary key not null serial,
     nom varchar(100) not null,
     numero varchar(10) not null unique,
     cin varchar(12) not null,
     codeSecret varchar(32) not null
 );
 
-insert into client values(1, 'Client 1', '0344343343', '101221321456', md5('root'));
-insert into client values(2, 'Client 2', '0324343343', '101221321457', md5('root'));
+insert into client values(1, 'Johan', '0344343343', '101221321456', md5('root'));
+insert into client values(2, 'Mihaja', '0342547896', '101221321457', md5('root'));
 
 drop table MobileMoney;
 create table MobileMoney (
@@ -57,3 +57,4 @@ on c.id = cr.idClient;
 create view v_somme_solde_credit as
 select id, sum(valeur) from v_solde_credit
 group by id;
+

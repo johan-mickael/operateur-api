@@ -5,11 +5,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import base.Client;
 import base.MobileMoney;
+import base.Solde;
 import base.mongo.Appel;
 import function.Response;
 
@@ -53,5 +55,15 @@ public class ClientController {
 			response = new Response("400", ex.toString());
 		}
 		return response;
+	}
+	
+	@GetMapping("acheter/credit/{montant}")
+	public Response achatCredit(@RequestHeader("Authorization") String token, @PathVariable Double montant) {
+		return Solde.achatCredit(token, montant);
+	}
+	
+	@PostMapping("inscription")
+	public Response inscription(@RequestBody Client client) {
+		return client.inscription();
 	}
 }

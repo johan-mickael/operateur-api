@@ -1,5 +1,10 @@
 package helper;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,5 +67,40 @@ public class NumeroHelper {
 		return NumeroHelper.getOperateur(prefixe);
 	}
 	
+	public static String genererNumero() {
+		String num = prefixe;
+		int min = 0;
+		int max = 9999999;
+		String rand = (min + (int)(Math.random() * ((max + min) + 1))) + "";
+		while(rand.length() < 7) {
+			rand = "0" + rand;
+		}
+		return num + rand;
+	}
+	
+	public static boolean verifierNouveauNumero(Connection co, String num) throws Exception {
+		boolean ret = true;
+		PreparedStatement st = null;
+		ResultSet result = null;
+		String sql = "SELECT numero from client where numero = '"+num+"'";
+		try {
+			st = co.prepareStatement(sql);
+			result = st.executeQuery();
+			if(result.next()) {
+				ret = false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				if(result != null) result.close();
+				if(st != null) st.close();
+			} catch(SQLException ex) {	
+				throw ex;
+			}
+		}
+		return ret;
+	}
 	
 }

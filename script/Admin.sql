@@ -6,7 +6,7 @@ create table admin(
 	mdp varchar(32) not null
 );
 
-insert into admin values(1, 'admin test', 'root', md5('root'));
+--insert into admin values(1, 'admin test', 'root', md5('root'));
 
 drop table login;
 create table login(

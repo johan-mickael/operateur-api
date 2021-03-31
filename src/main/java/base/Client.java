@@ -70,6 +70,12 @@ public class Client {
 		this.setNumero(numero);
 		this.setCodeSecret(codeSecret);
 	}
+	public Client(String nom, String cin, String codeSecret) throws Exception {
+		super();
+		this.setNom(nom);
+		this.setCin(cin);
+		this.setCodeSecret(codeSecret);
+	}
 	public Client() {
 		super();
 	}
@@ -327,11 +333,82 @@ public class Client {
 		return Client.getSoldeCredit(this);
 	}
 	
-//	public Response retraitMobileMoney(String num, Double val) {
-//		Response res = null;
-//		Double soldeMobilemoney = (double) Client.getSoldeMobileMoney(num).data;
-//		if(val > soldeMobilemoney)
-//			return new Response("210", "Solde insuffisant");
-//		
-//	}
+	public static String getNouveauNumero(Connection co) throws Exception {
+		String num = NumeroHelper.genererNumero();
+		while(true) {
+			if(NumeroHelper.verifierNouveauNumero(co, num)) {
+				break;
+			} else {
+				num = NumeroHelper.genererNumero();
+			}
+		}
+		return num;
+	}
+	
+	public void setNouveauNumero(Connection co) throws Exception {
+		this.numero = Client.getNouveauNumero(co);
+	}
+	
+	public static void post(Connection co, Client client) throws Exception {
+		PreparedStatement st = null;
+		String sql = "insert into client (id, nom, numero, cin, codesecret) values (?, ?, ?, ?, ?)";
+		try {
+			st = co.prepareStatement(sql);
+			Integer id = Helper.getNextId(co, "client");
+			st.setInt(1, id);
+			st.setString(2, client.getNom());
+			st.setString(3, client.getNumero());
+			st.setString(4, client.getCin());
+			st.setString(5, Helper.getMD5Hash(client.getCodeSecret()));
+			st.execute();
+			co.commit();
+		} catch(Exception ex) {
+			co.rollback();
+			ex.printStackTrace();
+			throw ex;
+		} finally {
+			try {
+				if(st != null) st.close();
+			} catch(SQLException ex) {
+				ex.printStackTrace();
+				throw ex;
+			}
+		}
+	}
+	
+	public void post(Connection co) throws Exception {
+		Client.post(co, this);
+	}
+	
+	public static void inscription(Connection co, Client client) throws Exception {
+		client.setNouveauNumero(co);
+		client.post(co);
+	}
+	
+	public void inscription(Connection co) throws Exception {
+		Client.inscription(co, this);
+	}
+	
+	public Response inscription() {
+		Response res = null;
+		Connection co = null;
+		try {
+			co = Function.getConnect();
+			inscription(co);
+			String message = "Inscription effectué avec succes! votre numero : " + this.getNumero();
+			res = new Response("200", message);
+		} catch (Exception e) {
+			e.printStackTrace();
+			res = new Response("400", e.toString());
+		} finally {
+			try {
+				if(co != null) co.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+				res = new Response("500", e.toString());
+			}
+		}
+		return res;
+	}
+
 }

@@ -2,6 +2,8 @@ CREATE DATABASE s5final;
 CREATE ROLE s5Role LOGIN PASSWORD 'root';
 ALTER DATABASE s5final OWNER TO s5Role;
 -----------------------------------------------------------------------
+
+
 create table operateurs (
 	id int primary key,
 	nom varchar(15)

@@ -8,7 +8,7 @@ create table solde (
 create sequence idOffre;
 
 insert into solde values(1, 5000, 15000);
-
+insert into solde  values(2, 0, 25000);
 /* drop table soldeOffre;
  drop table achatOffre;
  * */
