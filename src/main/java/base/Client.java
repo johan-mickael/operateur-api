@@ -35,7 +35,7 @@ public class Client {
 		return numero;
 	}
 	public void setNumero(String numero) throws Exception {
-		new NumeroHelper(numero);
+//		new NumeroHelper(numero);
 		this.numero = numero;
 	}
 	public String getCin() {
@@ -406,6 +406,31 @@ public class Client {
 			} catch (Exception e) {
 				e.printStackTrace();
 				res = new Response("500", e.toString());
+			}
+		}
+		return res;
+	}
+	
+	public static Response getClientByToken(String token) {
+		Connection co = null;
+		Response res = null;
+		try {
+			co = Function.getConnect();
+			res = Login.getIdUserTokenRequired(co, token, Login.table2);
+			if(res.code.compareTo("200")==0) {
+				Integer id = Integer.parseInt((String)res.data);
+				Client c = new Client(co, id);
+				res = new Response("200", "Get Client ok", c);
+			}
+		} catch(Exception ex) {
+			ex.printStackTrace();
+			res = new Response("400", ex.toString());
+		} finally {
+			try {
+				if(co != null) co.close();
+			} catch(SQLException ex) {	
+				ex.printStackTrace();
+				res = new Response("500", ex.toString());
 			}
 		}
 		return res;

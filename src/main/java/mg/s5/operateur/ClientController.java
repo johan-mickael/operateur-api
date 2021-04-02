@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import base.Client;
+import base.Login;
 import base.MobileMoney;
 import base.Solde;
 import base.mongo.Appel;
@@ -46,11 +47,15 @@ public class ClientController {
 	}
 
 	@GetMapping("historique")
-	public Response historique() {
+	public Response historique(@RequestHeader("Authorization") String token) {
 		Response response = null;
 		try {
-			Client client = new Client("0345689231", "Mihaja");
-			response = new Response("200", "historique", Appel.historique(client.getNumero()));
+			response = Client.getClientByToken(token);
+			if(response.code.compareTo("200") == 0) {
+				Client client = (Client) response.data;
+				response = new Response("200", "historique", Appel.historique(client.getNumero())) ;
+			}
+				
 		} catch(Exception ex) {
 			response = new Response("400", ex.toString());
 		}

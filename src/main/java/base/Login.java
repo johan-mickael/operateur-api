@@ -228,17 +228,19 @@ public class Login {
 		if(token.split(" ").length > 1) {
 			token = token.split(" ")[1];
 		}
-		System.out.println(token);
+		Response res = null;
 		String id = null;
 		try {
 			id = Login.getIdUserTokenValide(co, token, table);
 			if(id == null) {
-				return new Response("403", "Veuillez vous connecter");
+				res = new Response("403", "Veuillez vous connecter");
+			} else {
+				res = new Response("200", "getIdUserTokeRequired", id);
 			}
 		} catch (Exception e1) {
 			e1.printStackTrace();
-			return new Response("500", e1.toString());
+			res = new Response("500", e1.toString());
 		}
-		return new Response("200", "getIdUserTokeRequired", id);
+		return res;
 	}
 }

@@ -24,10 +24,11 @@ public class NumeroHelper {
 	}
 
 	public void setNumero(String numero) throws Exception {
+		numero = numero.trim();
         String regex = "[0-9]+"; 
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(numero); 
-        
+        System.out.println(numero);
         if(m.find() && m.group().equals(numero)) 
         	this.numero = numero; 
         else
