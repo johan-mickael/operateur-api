@@ -125,8 +125,10 @@ public class MobileMoney {
 			st.setInt(1, id);
 			st.setInt(2, inputMobileMoney.idClient);
 			st.setBigDecimal(3, inputMobileMoney.valeur);
+			System.out.println(st);
 			st.execute();
 			res = new Response("200", "Insertion Mobile Money OK", inputMobileMoney);
+			co.commit();
 		} catch(Exception ex) {
 			ex.printStackTrace();
 			res = new Response("400", ex.toString());

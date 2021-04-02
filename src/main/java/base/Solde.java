@@ -1,5 +1,6 @@
 package base;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,10 +9,47 @@ import java.sql.SQLException;
 import function.Function;
 import function.Response;
 
-public class Solde {
+@SuppressWarnings("serial")
+public class Solde  implements Serializable {
 	int idClient;
 	Double credit;
 	Double mobilemoney;
+	
+	public Solde() {
+		super();
+	}
+	
+	
+	public int getIdClient() {
+		return idClient;
+	}
+
+
+	public void setIdClient(int idClient) {
+		this.idClient = idClient;
+	}
+
+
+	public Double getCredit() {
+		return credit;
+	}
+
+
+	public void setCredit(Double credit) {
+		this.credit = credit;
+	}
+
+
+	public Double getMobilemoney() {
+		return mobilemoney;
+	}
+
+
+	public void setMobilemoney(Double mobilemoney) {
+		this.mobilemoney = mobilemoney;
+	}
+
+
 	public Solde(int idClient, Double credit, Double mobilemoney) {
 		super();
 		this.idClient = idClient;
@@ -102,7 +140,34 @@ public class Solde {
 			throw e;
 		} finally {
 			if(st != null) st.close();
+		}	
+	}
+	
+	public static Response getSolde(String token)  {
+		Response response = null;
+		Connection co = null;
+		try {
+			co = Function.getConnect();
+			response = Login.getIdUserTokenRequired(co, token, Login.table2);
+			if(response.data != null) {
+				String id = (String) response.data;
+				Solde solde = new Solde(Integer.parseInt(id), co);
+				response = new Response("200", "Solde ok", solde);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			response = new Response("400", e.toString());
+		} finally {
+			if(co != null)
+				try {
+					co.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					response = new Response("400", e.toString());
+				}
 		}
-		
+		return response;
 	}
 }

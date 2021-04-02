@@ -1,0 +1,89 @@
+[
+  {
+    "idOffre" : "1",
+    "nom" : "m'ora one",
+    "tarif" : "1000",
+    "validite" : "1",
+    "forfaits" : [
+      {
+        "produit" : "Appel",
+        "unite" : "minute",
+        "utilisation" :
+          {
+            "operateur" : "20",
+            "autres" : "10",
+            "international" : "4"
+          }
+      }
+    ]
+  }
+  ,
+  {
+    "idOffre" : "2",
+    "nom" : "m'ora 500",
+    "tarif" : "500",
+    "validite" : "1",
+    "forfaits" : [
+      {
+        "produit" : "Appel",
+        "unite" : "Ar",
+        "valeur" : "500",
+        "utilisation" :
+          {
+            "unite" : "sec",
+            "operateur" : "1",
+            "autres" : "3",
+            "international" : "5"
+          }
+      }
+      ,
+      {
+        "produit" : "Message",
+        "unite" : "SMS",
+        "utilisation" :
+          {
+            "operateur" : "20",
+            "autres" : "0",
+            "international" : "0"
+          }
+      }
+      ,
+      {
+        "produit" : "Internet",
+        "unite" : "Mo",
+        "valeur" : "20"
+      }
+    ]
+  },
+  {
+    "idOffre" : "3",
+    "nom" : "faceboobaka",
+    "tarif" : "500",
+    "validite" : "4",
+    "forfaits" : [
+      {
+        "produit" : "Facebook",
+        "unite" : "Go",
+        "valeur" : "1"
+      }
+    ]
+  }, 
+  {
+    "idOffre" : "4",
+    "nom" : "m'ora international",
+    "tarif" : "3000",
+    "validite" : "1",
+    "forfaits" : [
+      {
+        "produit" : "Appel",
+        "unite" : "minute",
+        "utilisation" :
+          {
+            "operateur" : "0",
+            "autres" : "0",
+            "international" : "60"
+          }
+      }
+    ]
+  }
+]

@@ -16,8 +16,8 @@ public class NumeroHelper {
 	private static final int tailleNumero = 10;
 	
 	public static final String memeOperateur = "operateur";
-	public static final String autreOperateur = "autre";
-	public static final String international = "international";
+	public static final String autreOperateur = "Autres";
+	public static final String international = "International";
 
 	public String getNumero() {
 		return numero;

@@ -36,7 +36,8 @@ public class Client {
 	}
 	public void setNumero(String numero) throws Exception {
 //		new NumeroHelper(numero);
-		this.numero = numero;
+		
+		this.numero = numero.trim();
 	}
 	public String getCin() {
 		return cin;
@@ -131,6 +132,7 @@ public class Client {
 			String sql = "select * from client";
 			sql += " where numero = '" + numero + "'";
 			sql += " and codesecret = '"+ codesecret + "'";
+			System.out.println(sql);
 			st = co.prepareStatement(sql);
 			rs = st.executeQuery();
 			if(rs.next()) {
@@ -208,8 +210,12 @@ public class Client {
 		Response ret = null;
 		try {
 			co = Function.getConnect();
+			ArrayList<Object> array = new ArrayList<Object>();
 			Login login = Client.login(co, client);
-			ret = new Response("200", "Login OK", login);
+			array.add(login);
+			Client cl = new Client(co, client.numero);
+			array.add(cl);
+			ret = new Response("200", "Login OK", array);
 		} catch(Exception ex) {
 			ex.printStackTrace();
 			ret = new Response("401", ex.toString());
@@ -233,7 +239,7 @@ public class Client {
 		this.id = id;
 		PreparedStatement st = null;
 		ResultSet result = null;
-		String sql = "SELECT * from client";
+		String sql = "SELECT * from client where id = " + this.id;
 		try {
 			st = co.prepareStatement(sql);
 			result = st.executeQuery();
@@ -241,6 +247,31 @@ public class Client {
 				this.cin = result.getString("cin");
 				this.nom = result.getString("nom");
 				this.numero = result.getString("numero");
+				this.codeSecret =  result.getString("codeSecret");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(result != null) result.close();
+			if(st != null) st.close();
+		}
+		
+	}
+	
+	public Client(Connection co, String numero) throws Exception {
+		this.numero = numero;
+		PreparedStatement st = null;
+		ResultSet result = null;
+		String sql = "SELECT * from client where numero = '" + this.numero + "'";
+		try {
+			st = co.prepareStatement(sql);
+			result = st.executeQuery();
+			if(result.next()) {
+				this.cin = result.getString("cin");
+				this.nom = result.getString("nom");
+				this.id = result.getInt("id");
 				this.codeSecret =  result.getString("codeSecret");
 			}
 		} catch (SQLException e) {

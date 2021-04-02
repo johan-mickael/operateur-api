@@ -125,6 +125,7 @@ public class SimulationAppel {
 		try {
 			st = co.prepareStatement(sql);
 			st.setString(1, this.operateur);
+			System.out.println(st);
 			result = st.executeQuery();
 			Double tarif = null;
 			if(result.next()) tarif = result.getDouble("prix");

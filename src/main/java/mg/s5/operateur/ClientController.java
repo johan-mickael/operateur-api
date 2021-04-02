@@ -62,6 +62,11 @@ public class ClientController {
 		return response;
 	}
 	
+	@GetMapping("solde")
+	public Response solde(@RequestHeader("Authorization") String token) {
+		return Solde.getSolde(token);
+	}
+
 	@GetMapping("acheter/credit/{montant}")
 	public Response achatCredit(@RequestHeader("Authorization") String token, @PathVariable Double montant) {
 		return Solde.achatCredit(token, montant);

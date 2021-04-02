@@ -54,6 +54,19 @@ public class OffreController {
 		return response;
 	}
 	
+	@GetMapping("get")
+	public Response getData(){
+		Response response = null;
+		try {
+			response = new Response("200", "Get Offre OK", offre.findAll());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			response = new Response("400", e.toString());
+		}
+		return response;
+	}
+	
 
 	@GetMapping("{id}")
 	public Response getById(@RequestHeader("Authorization") String token, @PathVariable String id) {
