@@ -10,6 +10,7 @@ import java.util.Date;
 
 import base.Login;
 import base.MobileMoney;
+import base.Solde;
 import function.Function;
 import function.Response;
 import helper.Helper;
@@ -136,6 +137,29 @@ public class DepotNonValide {
 		return res;
 	}
 	
+	public static ArrayList<String> getIdClient(Connection co, String id) throws Exception {
+		PreparedStatement st = null;
+		ResultSet result = null;
+		ArrayList<String> array = new ArrayList<String>();
+		String sql = "select * from mobilemoney where id = " +id;
+		try {
+			st = co.prepareStatement(sql);
+			result = st.executeQuery();
+			result.next();
+			array.add(result.getString("idClient"));
+			array.add(result.getString("valeur"));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(result != null) result.close();
+			if(st != null) st.close();
+		}
+		return array;
+				
+	}
+	
 	public static Response update(DepotNonValide inputDepot, String token) {
 		Response res =  null;
 		Connection co = null;
@@ -148,8 +172,11 @@ public class DepotNonValide {
 				st = co.prepareStatement(sql);
 				st.setInt(1, inputDepot.id);
 				st.execute();
-				co.commit();
 				res = new Response("200", "Validation mobile money réussie!", inputDepot);
+				ArrayList<String> array = (ArrayList<String>) DepotNonValide.getIdClient(co, inputDepot.id + "");
+				Solde solde = new Solde(Integer.parseInt(array.get(0)), co);
+				solde.update(co, "mobilemoney", solde.getMobilemoney() + Double.parseDouble(array.get(1)));
+				co.commit();
 			}
 		} catch(Exception ex) {
 			try {
