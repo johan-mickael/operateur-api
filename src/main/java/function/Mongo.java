@@ -17,8 +17,8 @@ import com.mongodb.client.MongoDatabase;
 
 
 public class Mongo {
-//	public static String uri = "mongodb+srv://root:root@mobiledb.f2sbp.mongodb.net";
-	public static String uri = "mongodb://localhost:27017";
+	public static String uri = "mongodb+srv://root:root@mobiledb.f2sbp.mongodb.net";
+//	public static String uri = "mongodb://localhost:27017";
 	public static String database  = "s5final";
 
 	public static Offres getById(String id) throws Exception {
